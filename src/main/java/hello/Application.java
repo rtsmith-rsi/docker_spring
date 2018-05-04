@@ -4,10 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @SpringBootApplication
-public class Application implements CommandLineRunner {
+@RestController
+public class Application {
 
     @Autowired
     private AuthorRepository repository;
@@ -16,8 +19,8 @@ public class Application implements CommandLineRunner {
         SpringApplication.run(Application.class, args);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+    @RequestMapping("/")
+    public String run(String args) throws Exception {
         repository.deleteAll();
 
         // save a couple of authors
@@ -40,6 +43,8 @@ public class Application implements CommandLineRunner {
         for (Author author : repository.findByLastName("Smith")) {
             System.out.println(author);
         }
+        return repository.findAll().get(0).firstName;
     }
+
 
 }
