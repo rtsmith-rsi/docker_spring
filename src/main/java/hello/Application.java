@@ -1,11 +1,20 @@
 package hello;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.ServletRequestAttributeEvent;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -13,7 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class Application {
 
     @Autowired
-    private AuthorRepository repository;
+    private RequestRepository repository;
+
+    @Autowired
+    private Environment env;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -21,29 +33,23 @@ public class Application {
 
     @RequestMapping("/")
     public String run(String args) throws Exception {
-        repository.deleteAll();
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String ip = req.getRemoteAddr();
+        String time = req.getHeader("Date");
 
         // save a couple of authors
-        repository.save(new Author("Alice", "Smith"));
-        repository.save(new Author("BillyBob", "Smith"));
+        repository.save(new Request(time, ip));
 
-        System.out.println("Authors found with findALL():");
-        System.out.println("==============================");
-        for (Author author : repository.findAll()) {
-            System.out.println(author);
+        List<Request> requests = repository.findAll();
+
+        String allRequests = "";
+
+        for (Request r : requests) {
+            allRequests += r.toString() + "\n";
         }
-        System.out.println();
 
-        System.out.println("Author found with findByFirstName('Alice'):");
-        System.out.println("--------------------------------");
-        System.out.println(repository.findByFirstName("Alice"));
+        return allRequests;
 
-        System.out.println("Authors found with findByLastName('Smith'):");
-        System.out.println("--------------------------------");
-        for (Author author : repository.findByLastName("Smith")) {
-            System.out.println(author);
-        }
-        return repository.findAll().get(0).firstName;
     }
 
 
