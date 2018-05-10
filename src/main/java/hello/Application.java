@@ -33,7 +33,7 @@ public class Application {
 
     @RequestMapping("/")
     public String run(String args) throws Exception {
-        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String ip = req.getRemoteAddr();
         String time = req.getHeader("Date");
 
@@ -45,7 +45,9 @@ public class Application {
         String allRequests = "";
 
         for (Request r : requests) {
-            allRequests += r.toString() + "\n";
+            if (r != null) {
+                allRequests += r.toString() + "\n";
+            }
         }
 
         return allRequests;
