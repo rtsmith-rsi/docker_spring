@@ -13,6 +13,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.http.HttpServletRequest;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +36,8 @@ public class Application {
     public String run(String args) throws Exception {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String ip = req.getRemoteAddr();
-        String time = req.getHeader("Date");
+        String time = ZonedDateTime.now().toString();
 
-        // save a couple of authors
         repository.save(new Request(time, ip));
 
         List<Request> requests = repository.findAll();
@@ -46,7 +46,7 @@ public class Application {
 
         for (Request r : requests) {
             if (r != null) {
-                allRequests += r.toString() + "\n";
+                allRequests += r.toString() + "&amp;";
             }
         }
 

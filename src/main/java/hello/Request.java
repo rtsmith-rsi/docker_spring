@@ -21,7 +21,7 @@ public class Request {
         public String toString() {
             return String.format(
                     "Request[id: %s%n ip: %s%n request time: %s%n]",
-                    id, ip, reqTime.toString());
+                    id.substring(id.length() - 4), ip, reqTime);
         }
 
 
