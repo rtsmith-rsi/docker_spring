@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lexipol Kube Demo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <div th:each="req : ${requests}">
+        <p th:text="${req.toString()}"></p>
+    </div>
+</body>
+</html>
