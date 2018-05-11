@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+    <h3>total requests: <span th:text="${requests.size()}"></span></h3>
     <div th:each="req : ${requests}">
         <p th:text="${req.toString()}"></p>
     </div>

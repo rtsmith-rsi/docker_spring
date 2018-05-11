@@ -28,5 +28,6 @@ public class MainController {
 
         List<Request> requests = repository.findAll(Sort.by("id").descending());
         model.addAttribute("requests", requests);
+        model.addAttribute("requestsLength", requests.size());
     }
 }
